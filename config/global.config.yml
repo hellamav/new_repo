@@ -1,0 +1,9 @@
+TERRAFORM_VERSION:
+SVC_CONNECTION:
+TERRAFORM_ENVIRONMENT:
+ResourceGroupName:
+azuresubscription:
+TERRAFORM_BACKEND_CONTAINER_NAME:
+Terraform_backend_storage_name:
+terraform_backend_storage_key:
+vault_name:
