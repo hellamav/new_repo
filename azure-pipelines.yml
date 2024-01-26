@@ -1,0 +1,146 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+parameters:
+  - name: deploymentmode
+    displayName: "Deployment Mode"
+    type: string
+    default: "plan only"
+    values:
+      - "Deploy full"
+      - "Plan only"
+
+  - name: useBackupAgent
+    displayName: "Use backuppool agent"
+    type: boolean
+    default: true
+  - name: Provision_rg - ${{parameters.deploymentMode}}
+
+pr: none
+trigger: none
+
+variables:
+- template: ./pipelines/config/global.config.yml
+
+stages:
+
+
+ - stage: deploy_resources
+   displayname: Deploy Resources
+   jobs:
+   - deployment: BuildAgentsforResources
+     displayname: Deploy Resources
+     continueOnError: false
+     strategy:
+     runonce: 
+     deploy:
+     steps:
+     - checkout:self
+     -task: AzureKeyVault@1
+      inputs:
+      azuresubscription: $(SVC_CONNECTION)
+      keyvaultName: $(VAULT_NAME)
+      displayname: "Download Azure Key Vault Secrets"
+
+    - task: ms-devlabs.custome-terraform-tasks.custome-terraform-installer-task.TerraformInstaller@0
+      inputs:
+         terraformversion: $(TERRAFORM_VERSION)
+      displayname: "Install Terraform"
+
+
+    -task: AzureCLI@2
+    displayname: "Terraform init"
+    inputs:
+    addspnToEnvironment: true
+    azuresubscription: $(SVC_CONNECTION)
+    failOnStandardError: true
+    scriptlocation: inlinescript
+    scriptType: pscore
+    inlinescript: |
+        az account set --subscription $(azuresubscription)
+        TERRAFORM_BACKEND_SUBSCRIPTION_ID=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+        subId=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+        ACCOUNT_KEY=$(az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
+        
+        export ARM_ACCESS_KEY=$ACCOUNT_KEY
+        export ARM_CLIENT_ID=$servicePrincipalId
+        export ARM_CLIENT_SECRET=$servicePrincipalKey
+        export ARM_Subscription_ID=$subId
+        export ARM_TENANT_ID=$(TENANT_ID)
+        ls
+        cd devops_template/modules/deploy_rg
+        terraform init \
+        -reconfigure \
+        -backend-config="key=$(TF_STATE_NAME).tfstate" \
+        -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)"\
+        -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" \
+        -backend-config="subscription_id"=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" \
+        -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
+    
+    -task: AzureCLI@2
+    displayname: "Terraform Validate"
+    inputs:
+    addspnToEnvironment: true
+    azuresubscription: $(SVC_CONNECTION)
+    failOnStandardError: false
+    scriptlocation: inlinescript
+    scriptType: bash
+    inlinescript: |
+      cd devops_template/modules/deploy_rg
+      terraform validate
+    -task: AzureCLI@2
+    displayname: "Terraform plan"
+    inputs:
+    addspnToEnvironment: true
+    azuresubscription: $(SVC_CONNECTION)
+    failOnStandardError: true
+    scriptlocation: inlinescript
+    scriptType: pscore
+    inlinescript: |
+        az account set --subscription $(azuresubscription)
+        TERRAFORM_BACKEND_SUBSCRIPTION_ID=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+        subId=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+        ACCOUNT_KEY=$(az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
+        
+        export ARM_ACCESS_KEY=$ACCOUNT_KEY
+        export ARM_CLIENT_ID=$servicePrincipalId
+        export ARM_CLIENT_SECRET=$servicePrincipalKey
+        export ARM_Subscription_ID=$subId
+        export ARM_TENANT_ID=$(TENANT_ID)
+        ls
+        cd devops_template/modules/deploy_rg
+        terraform init \
+        -reconfigure \
+        -backend-config="key=$(TF_STATE_NAME).tfstate" \
+        -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)"\
+        -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" \
+        -backend-config="subscription_id"=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" \
+        -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
+        terraform plan \
+        -input= false
+        -var-file=/.pipelines/config/global.config.yml
+    -task: AzureCLI@2
+    displayname: "Terraform apply"
+    inputs:
+    addspnToEnvironment: true
+    azuresubscription: $(SVC_CONNECTION)
+    failOnStandardError: true
+    scriptlocation: inlinescript
+    scriptType: pscore
+    inlinescript: |
+        az account set --subscription $(azuresubscription)
+        TERRAFORM_BACKEND_SUBSCRIPTION_ID=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+        subId=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+        ACCOUNT_KEY=$(az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
+        
+        export ARM_ACCESS_KEY=$ACCOUNT_KEY
+        export ARM_CLIENT_ID=$servicePrincipalId
+        export ARM_CLIENT_SECRET=$servicePrincipalKey
+        export ARM_Subscription_ID=$subId
+        export ARM_TENANT_ID=$(TENANT_ID)
+        
+        cd devops_template/modules/deploy_rg
+        terraform apply tfplan
+        
