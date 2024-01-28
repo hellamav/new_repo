@@ -7,7 +7,7 @@ parameters:
   - name: deploymentmode
     displayName: "Deployment Mode"
     type: string
-    default: "plan only"
+    default: "Plan only"
     values:
       - "Deploy full"
       - "Plan only"
@@ -18,6 +18,8 @@ parameters:
     default: "true" # Change to boolean value
 
   - name: Provision_rg
+    displayName: "Provision Resource Group"
+    type: string
 
 pr: none
 trigger: none
