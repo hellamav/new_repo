@@ -17,9 +17,7 @@ parameters:
     type: boolean
     default: "true" # Change to boolean value
 
-  - name: Provision_rg
-    displayName: "Provision Resource Group"
-    type: string
+
 
 pr: none
 trigger: none
