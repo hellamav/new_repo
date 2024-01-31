@@ -9,3 +9,4 @@ variables:
   subscription: "cv_portfolio"
   TF_STATE_NAME: "tfstate"
   environment: "dev"
+  TENANT_ID: "dcbfd347-01de-412e-81cc-f75a84dbc097"
