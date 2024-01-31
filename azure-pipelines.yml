@@ -70,7 +70,7 @@ stages:
                 export ARM_TENANT_ID=$(TENANT_ID)
 
                 ls
-                cd devops_template/modules/deploy_rg
+                cd ./modules/deploy_rg
                 terraform init \
                   -reconfigure \
                   -backend-config="key=$(TF_STATE_NAME).tfstate" \
@@ -88,7 +88,7 @@ stages:
               scriptLocation: inlineScript
               scriptType: bash
               inlineScript: |
-                cd devops_template/modules/deploy_rg
+                cd ./modules/deploy_rg
                 terraform validate
 
           - task: AzureCLI@2
