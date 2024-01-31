@@ -112,18 +112,19 @@ stages:
                 $env:ARM_TENANT_ID = $TENANT_ID
 
 
-                ls
                 cd ./modules/deploy_rg
                 terraform init \
-                  -reconfigure \
-                  -backend-config="key=$(TF_STATE_NAME).tfstate" \
-                  -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" \
-                  -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" \
-                  -backend-config="subscription_id=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" \
-                  -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
+                -backend-config="key=$(TF_STATE_NAME).tfstate" \
+                -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" \
+                -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" \
+                -backend-config="subscription_id=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" \
+                -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
+
+
                 terraform plan \
-                  -input=false \
-                  -var-file=/.pipelines/config/global.config.yml
+                -input=false \
+                 -var-file=/.pipelines/config/global.config.yml
+
 
           - task: AzureCLI@2
             displayName: "Terraform apply"
