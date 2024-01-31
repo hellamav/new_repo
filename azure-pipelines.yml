@@ -102,8 +102,8 @@ stages:
               inlineScript: |
                 az account set --subscription $(azuresubscription)
                 $TERRAFORM_BACKEND_SUBSCRIPTION_ID = az account show --subscription cv_portfolio --query id --output tsv
-                subId=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
-                ACCOUNT_KEY=$(az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
+                $subId = az account show --subscription $(SUBSCRIPTION) --query id --output tsv
+                $ACCOUNT_KEY= az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
 
                 export ARM_ACCESS_KEY=$ACCOUNT_KEY
                 export ARM_CLIENT_ID=$servicePrincipalId
