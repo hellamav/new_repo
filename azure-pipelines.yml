@@ -100,9 +100,6 @@ stages:
               scriptLocation: inlineScript
               scriptType: pscore
               inlineScript: |
-                export AZURE_CLIENT_ID=$(ClientId)
-                export AZURE_CLIENT_SECRET=$(ClientSecret)
-                export AZURE_TENANT_ID=$(TENANT_ID)
                 az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
                 az account set --subscription $(azuresubscription)
                 $TERRAFORM_BACKEND_SUBSCRIPTION_ID = $(az account show --query id --output tsv)
