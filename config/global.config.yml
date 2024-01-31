@@ -10,6 +10,6 @@ variables:
   TF_STATE_NAME: "tfstate"
   environment: "dev"
   TENANT_ID: "dcbfd347-01de-412e-81cc-f75a84dbc097"
-  servicePrincipalId: "5c9cdc8e-f993-4ba8-853f-bc1d667938d3"
-  servicePrincipalKey: "owB8Q~G.htu5ZH1KR_D8TvwOW1dEmGaklUjuOb-p"
+  ClientId: "5c9cdc8e-f993-4ba8-853f-bc1d667938d3"
+  Clientsecret: "owB8Q~G.htu5ZH1KR_D8TvwOW1dEmGaklUjuOb-p"
 
