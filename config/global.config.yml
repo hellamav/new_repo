@@ -1,8 +1,8 @@
 variables:
 
   TERRAFORM_VERSION: "1.7.1"
-  SVC_CONNECTION: "hellamav"
-  azuresubscription: "myserviceconnect"
+  SVC_CONNECTION: "myserviceconnect"
+  azuresubscription: "a2b5e6fe-4153-4ca0-a74e-3f5e50da3ac7"
   TERRAFORM_BACKEND_CONTAINER_NAME: "$logs"
   Terraform_backend_storage_name: "testingpipesacc"
   TF_BACKEND_RESOURCE_GROUP_NAME: "testingpipes"
