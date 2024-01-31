@@ -18,9 +18,14 @@ parameters:
     default: "true" # Change to boolean value
 
 
+name: Provision_rg - ${{ parameters.deploymentMode }}
+
 
 pr: none
 trigger: none
+
+pool: 
+  vmImage: ubuntu-latest
 
 variables:
 - template: config/global.config.yml
@@ -37,17 +42,11 @@ stages:
         deploy:
           steps:
           - checkout: self
-          - task: AzureKeyVault@2
-            inputs:
-              azureSubscription: $(SVC_CONNECTION)
-              KeyVaultName: $(VAULT_NAME)
-            displayName: "Download Azure Key Vault Secrets"
-
           - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
             inputs:
-             terraformVersion: '0.12.31'
-             displayName: "Install Terraform"
-
+              terraformVersion: '0.12.31'
+              displayName: "Install Terraform"
+ 
           - task: AzureCLI@2
             displayName: "Terraform init"
             inputs:
@@ -57,7 +56,7 @@ stages:
               scriptLocation: inlineScript
               scriptType: bash
               inlineScript: |
-                az account set --subscription $(azuresubscription)
+                az account set --subscription $(subscription)
                 TERRAFORM_BACKEND_SUBSCRIPTION_ID=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
                 subId=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
                 ACCOUNT_KEY=$(az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
@@ -111,7 +110,7 @@ stages:
                 export ARM_TENANT_ID=$(TENANT_ID)
 
                 ls
-                cd devops_template/modules/deploy_rg
+                cd ./modules/deploy_rg
                 terraform init \
                   -reconfigure \
                   -backend-config="key=$(TF_STATE_NAME).tfstate" \
@@ -143,5 +142,5 @@ stages:
                 export ARM_Subscription_ID=$subId
                 export ARM_TENANT_ID=$(TENANT_ID)
 
-                cd devops_template/modules/deploy_rg
+                cd ./modules/deploy_rg
                 terraform apply tfplan

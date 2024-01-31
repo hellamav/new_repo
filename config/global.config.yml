@@ -3,5 +3,5 @@ SVC_CONNECTION: 'hellamav'
 azuresubscription: 'a2b5e6fe-4153-4ca0-a74e-3f5e50da3ac7'
 TERRAFORM_BACKEND_CONTAINER_NAME: '$logs'
 Terraform_backend_storage_name: 'testingpipesacc'
-terraform_backend_storage_key: 'wgIjMymFoqMPwV/PEmVsus/MVlLzbYzvoGd3ouCt82cY1dBwQtICTF0jHFa/+jJNw1f9/DeYFb9h+AStc8/71A=='
-vault_name: 'mykeiity'
+(TF_BACKEND_RESOURCE_GROUP_NAME: 
+subscription: 
