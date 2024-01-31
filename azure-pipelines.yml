@@ -101,9 +101,9 @@ stages:
               scriptType: pscore
               inlineScript: |
                 az account set --subscription $(azuresubscription)
-                $TERRAFORM_BACKEND_SUBSCRIPTION_ID = az account show --subscription cv_portfolio --query id --output tsv
-                $subId = az account show --subscription $(SUBSCRIPTION) --query id --output tsv
-                $ACCOUNT_KEY= az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
+                TERRAFORM_BACKEND_SUBSCRIPTION_ID=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+                subId=$(az account show --subscription $(SUBSCRIPTION) --query id --output tsv)
+                ACCOUNT_KEY=$(az storage account keys list --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --account-name $(TF_BACKEND_STORAGE_NAME) --query '[0].value' -o tsv)
 
                 export ARM_ACCESS_KEY=$ACCOUNT_KEY
                 export ARM_CLIENT_ID=$servicePrincipalId
@@ -113,15 +113,16 @@ stages:
 
                 ls
                 cd ./modules/deploy_rg
-                TF_VAR_TERRAFORM_BACKEND_SUBSCRIPTION_ID=$TERRAFORM_BACKEND_SUBSCRIPTION_ID terraform init \
-                -reconfigure \
-                -backend-config="key=$(TF_STATE_NAME).tfstate" \
-                -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" \
-                -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" \
-                -backend-config="subscription_id=$TF_VAR_TERRAFORM_BACKEND_SUBSCRIPTION_ID" \
-                -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
-
-                terraform plan -input=false -var-file=/.pipelines/config/global.config.yml
+                terraform init \
+                  -reconfigure \
+                  -backend-config="key=$(TF_STATE_NAME).tfstate" \
+                  -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" \
+                  -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" \
+                  -backend-config="subscription_id=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" \
+                  -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
+                terraform plan \
+                  -input=false \
+                  -var-file=/.pipelines/config/global.config.yml
 
           - task: AzureCLI@2
             displayName: "Terraform apply"
@@ -145,5 +146,4 @@ stages:
 
                 cd ./modules/deploy_rg
                 terraform apply tfplan
-
 
