@@ -36,7 +36,6 @@ stages:
   jobs:
   - deployment: BuildAgentsforResources
     displayName: 'Deploy Resource'
-    environment : 'Dev'
     continueOnError: "false" # Change to boolean value
     strategy:
       runOnce:
