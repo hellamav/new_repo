@@ -17,12 +17,6 @@ parameters:
     type: boolean
     default: "true" # Change to boolean value
 
-  - name: environment
-    displayName: "environment"
-    type: string
-    default: "env"
-    
-
 
 
 name: Provision_rg - ${{ parameters.deploymentMode }}
