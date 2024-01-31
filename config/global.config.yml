@@ -7,4 +7,5 @@ variables:
   Terraform_backend_storage_name: "testingpipesacc"
   TF_BACKEND_RESOURCE_GROUP_NAME: "testingpipes"
   subscription: "cv_portfolio"
-  (TF_STATE_NAME: "tfstate"
+  TF_STATE_NAME: "tfstate"
+  environment: "dev"
