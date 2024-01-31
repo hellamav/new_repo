@@ -115,7 +115,7 @@ stages:
                 $env:ARM_AZURE_CLIENT_SECRET="CLIENT_SECRET"
                 $env:ARM_AZURE_TENANT_ID="TENANT_ID"
                 $env:ARM_AZURE_CLIENT_ID= "ClientId"
-                $env:ARM_CLIENT_SECRET= :Clientsecret
+                $env:ARM_CLIENT_SECRET= "Clientsecret"
                 
 
 
