@@ -8,4 +8,4 @@ variables:
   TF_BACKEND_RESOURCE_GROUP_NAME: "testingpipes"
   subscription: "cv_portfolio"
   TF_STATE_NAME: "tfstate"
-  
+  environment: "dev"
