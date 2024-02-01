@@ -121,7 +121,7 @@ stages:
                   -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
 
                  Write-Host "Current Working Directory: $(Get-Location)"
-                  terraform plan -input=false -var-file=./config/global.config.yml
+                  terraform plan -input=false -var-file=../../config/global.config.yml
 
 
 
@@ -148,4 +148,9 @@ stages:
 
                 cd ./modules/deploy_rg
                 terraform apply tfplan
+
+
+
+
+
 
