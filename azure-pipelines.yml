@@ -100,7 +100,7 @@ stages:
               scriptLocation: inlineScript
               scriptType: pscore
               inlineScript: |
-                az login --service-principal --u $AZURE_CLIENT_ID --p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
                 az account set --subscription $(azuresubscription)
                 $TERRAFORM_BACKEND_SUBSCRIPTION_ID = $(az account show --query id --output tsv)
                 $subId= $(az account show --query id --output tsv)
@@ -123,7 +123,7 @@ stages:
 
                  terraform plan `
                    -input=false `
-                   -var-file=config/global.config.yml
+                   -var-file=global.config.yml
 
 
           - task: AzureCLI@2
