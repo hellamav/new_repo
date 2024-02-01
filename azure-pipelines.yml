@@ -121,7 +121,7 @@ stages:
                   -backend-config="subscription_id=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" `
                   -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
 
-                 Set-Location -Path ./config/
+                 Set-Location -Path /Users/hemmanuellaogobene/Documents/GitHub/new_repo/config/global.config.yml
                    terraform plan -input=false -var-file=global.config.yml
 
 
