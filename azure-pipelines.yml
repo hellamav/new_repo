@@ -100,15 +100,14 @@ stages:
               scriptLocation: inlineScript
               scriptType: pscore
               inlineScript: |
-                az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-                az account set --subscription $(azuresubscription)
+                az account set --subscription $(subscription)
                 $TERRAFORM_BACKEND_SUBSCRIPTION_ID = $(az account show --query id --output tsv)
                 $subId= $(az account show --query id --output tsv)
                 $ACCOUNT_KEY = $(az storage account keys list --account-name $(TF_BACKEND_STORAGE_NAME) --resource-group $(TF_BACKEND_RESOURCE_GROUP_NAME) --query '[0].value' -o tsv)
                 
                 $env:ARM_ACCESS_KEY = $ACCOUNT_KEY
-                $env:ARM_CLIENT_ID = $AZURE_CLIENT_ID
-                $env:ARM_CLIENT_SECRET = $AZURE_CLIENT_SECRET
+                $env:ARM_CLIENT_ID = $servicePrincipalId
+                $env:ARM_CLIENT_SECRET = $AservicePrincipalKey
                 $env:ARM_Subscription_ID = $subId
                 $env:ARM_TENANT_ID = $AZURE_TENANT_ID
 
