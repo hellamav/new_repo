@@ -122,6 +122,8 @@ stages:
                   -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
 
                  terraform plan `
+                   -input=false `
+                   -var-file=./config/global_config.yml
 
 
           - task: AzureCLI@2
