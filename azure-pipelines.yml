@@ -29,7 +29,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-- template: config/global.config.yml
+- template: config/global_config.yml
 
 stages:
 - stage: deploy_resources
@@ -122,7 +122,7 @@ stages:
                   -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
 
                  Write-Host "Current Working Directory: $(Get-Location)"
-                  terraform plan -input=false -var-file=../../config/global.config.yml
+                  terraform plan -input=false -var-file=../../config/global_config.yml
 
 
 
