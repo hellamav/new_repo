@@ -111,7 +111,8 @@ stages:
                 $env:ARM_Subscription_ID = $subId
                 $env:ARM_TENANT_ID = $AZURE_TENANT_ID
 
-                
+                pwd
+                ls
                 cd ./modules/deploy_rg
                 terraform init `
                   -backend-config="key=$(TF_STATE_NAME).tfstate" `
