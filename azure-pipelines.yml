@@ -113,7 +113,7 @@ stages:
 
                 pwd
                 ls
-                cd modules/deploy_rg
+                cd ./modules/deploy_rg
                 terraform init `
                   -backend-config="key=$(TF_STATE_NAME).tfstate" `
                   -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" `
@@ -122,7 +122,8 @@ stages:
                   -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
 
                  Write-Host "Current Working Directory: $(Get-Location)"
-                  terraform plan -input=false -var-file=./config/global.config.yml
+                  terraform plan -input=false -var-file=../../config/global.config.yml
+
 
 
 
