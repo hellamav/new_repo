@@ -123,7 +123,7 @@ stages:
 
                  terraform plan `
                    -input=false `
-                   -var-file=./config/global.config.yml
+                   -var-file=/Users/hemmanuellaogobene/Documents/GitHub/new_repo/config/global.config.yml
 
 
           - task: AzureCLI@2
