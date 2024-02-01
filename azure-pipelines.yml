@@ -113,7 +113,7 @@ stages:
 
                 pwd
                 ls
-                cd ./modules/deploy_rg
+                cd modules/deploy_rg
                 terraform init `
                   -backend-config="key=$(TF_STATE_NAME).tfstate" `
                   -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" `
