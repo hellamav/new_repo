@@ -107,33 +107,23 @@ stages:
                 $ACCOUNT_KEY= $(az storage account keys list --query '[0].value' -o tsv)
 
                 $env:ARM_ACCESS_KEY = $ACCOUNT_KEY
-                $env:ARM_CLIENT_ID = $servicePrincipalId
-                $env:ARM_CLIENT_SECRET = $servicePrincipalKey
+                $env:ARM_CLIENT_ID = $AZURE_CLIENT_ID
+                $env:ARM_CLIENT_SECRET = $AZURE_CLIENT_SECRET
                 $env:ARM_Subscription_ID = $subId
-                $env:ARM_TENANT_ID = $TENANT_ID
-                $env:ARM_AZURE_CLIENT_ID="APP_ID"
-                $env:ARM_AZURE_CLIENT_SECRET="CLIENT_SECRET"
-                $env:ARM_AZURE_TENANT_ID="TENANT_ID"
-                $env:ARM_AZURE_CLIENT_ID= "ClientId"
-                $env:ARM_CLIENT_SECRET= "Clientsecret"
+                $env:ARM_TENANT_ID = $AZURE_TENANT_ID
+
                 
-
-
-
-
-
                 cd ./modules/deploy_rg
                 terraform init `
-                -backend-config="key=$(TF_STATE_NAME).tfstate" `
-                -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" `
-                -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" `
-                -backend-config="subscription_id=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" `
-                -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
+                  -backend-config="key=$(TF_STATE_NAME).tfstate" `
+                  -backend-config="resource_group_name=$(TF_BACKEND_RESOURCE_GROUP_NAME)" `
+                  -backend-config="storage_account_name=$(TF_BACKEND_STORAGE_NAME)" `
+                  -backend-config="subscription_id=$TERRAFORM_BACKEND_SUBSCRIPTION_ID" `
+                  -backend-config="container_name=$(TF_BACKEND_CONTAINER_NAME)"
 
-
-                terraform plan `
-                -input=false `
-                 -var-file=./config/global.config.yml
+                 terraform plan `
+                   -input=false `
+                   -var-file=./config/global.config.yml
 
 
           - task: AzureCLI@2
